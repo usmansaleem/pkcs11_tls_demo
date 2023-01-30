@@ -16,6 +16,7 @@ COMPA_CA_PEM="${CA_CERTS_PATH}/${OU}_ca.pem"
 ROOT_CA_KS=$CA_CERTS_PATH/root_ca.p12
 INTER_CA_KS=$CA_CERTS_PATH/inter_ca.p12
 COMPA_CA_KS=$CA_CERTS_PATH/compa_ca.p12
+TRUSTSTORE_KS=$CA_CERTS_PATH/truststore.p12
 
 mkdir $CA_CERTS_PATH
 
@@ -64,6 +65,19 @@ cat $ROOT_CA_PEM >> $COMPA_CA_PEM
 echo "Importing signed company ca CSR into $COMPA_CA_KS"
 keytool -keystore $COMPA_CA_KS -importcert -alias ${OU}_ca \
 -storepass test123 -noprompt -file $COMPA_CA_PEM
+
+echo "Generating Truststore"
+keytool -import -trustcacerts -alias root_ca \
+-file $ROOT_CA_PEM -keystore $TRUSTSTORE_KS \
+-storepass test123 -noprompt
+
+keytool -import -trustcacerts -alias inter_ca \
+-file $INTER_CA_PEM -keystore $TRUSTSTORE_KS \
+-storepass test123 -noprompt
+
+keytool -import -trustcacerts -alias ${OU}_ca \
+-file $COMPA_CA_PEM -keystore $TRUSTSTORE_KS \
+-storepass test123 -noprompt
 
 echo "Generating Server and Client keystores..."
 ### Generate client keystores
