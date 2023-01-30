@@ -1,0 +1,11 @@
+### Generated keystores and certificates ###
+ca_certs
+server
+client
+
+# symlinks to libnss (for Mac OS)
+libnss3.dylib
+libsoftokn3.dylib
+
+### Mac OS ###
+.DS_Store
