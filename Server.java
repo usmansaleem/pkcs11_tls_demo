@@ -19,8 +19,8 @@ public class Server {
     public static void main(String[] args) throws Exception {
         System.out.println("Initializing SunPKCS11 Provider...");
         final String keystorePassword = "test123";
-        //final Path nssConfigPath = Path.of("./server/pkcs11.cfg");
-        final Path nssConfigPath = Path.of("./server/pkcs11_softhsm.cfg");
+        final Path nssConfigPath = Path.of("./server/pkcs11.cfg");
+        //final Path nssConfigPath = Path.of("./server/pkcs11_softhsm.cfg");
         final Provider uninit_Provider = Security.getProvider("SunPKCS11");
         final Provider provider = uninit_Provider.configure(nssConfigPath.toString());
         Security.addProvider(provider);
@@ -28,16 +28,6 @@ public class Server {
         final KeyStore keystore = KeyStore.getInstance("PKCS11", provider);
         keystore.load(null, keystorePassword.toCharArray());
 
-        java.util.Enumeration<String> enumeration = keystore.aliases();
-        while(enumeration.hasMoreElements()) {
-            String alias = enumeration.nextElement();
-            System.out.println("alias name: " + alias);
-            java.security.cert.Certificate certificate = keystore.getCertificate(alias);
-            System.out.println(certificate.toString());
-
-        }
-
-        
 
         final KeyManagerFactory kmf = KeyManagerFactory.getInstance("PKIX");
         kmf.init(keystore, keystorePassword.toCharArray());
