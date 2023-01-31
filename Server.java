@@ -1,18 +1,8 @@
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.TrustManagerFactory;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import javax.net.ssl.*;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.security.KeyStore;
-import java.security.Provider;
-import java.security.Security;
+import java.security.*;
 import java.security.cert.X509Certificate;
 
 public class Server {
