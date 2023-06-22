@@ -8,15 +8,15 @@ hence the certificate verification fails in Java 17. The same code works in Java
 SoftHSM does return CKM_SHA256 as available mechanism, hence the same code works when connecting to SoftHSM via PKCS11 in Java 17.
 
 ## Pre-req
-- See [Setup](#setup) on how to make nss libraries available on the system (if missing). 
-- See/execute `certs.sh` which creates CA, server and client keystores and initialize the nss database for the server.
-- `Server.java` creates a simple `SSLServerSocket` backed by PKCS11 keystore and performs TLS mutual authentication
-- `Client.java` creates a simple `SSLSocket` based by PKCS12 keystore and connects to Server.
+- Need `docker compose`
 
 ## Run
-- Execute `java -Djavax.net.debug=ssl:handshake:verbose Server.java`
-- Execute `java -Djavax.net.debug=ssl:handshake:verbose Client.java`
-- Alternatively, use curl: `curl --cacert ./client/client.pem --cert-type P12 --cert ./client/client.p12:test123 https://localhost:8443/`
+- `docker compose up` This will generate CA, server and client certificates in first run and execute sample Server.
+This will expose server on port 8443.
+- From a different terminal windows, use `curl` to connect to above server:
+```
+curl --cacert ./certs/client.pem --cert-type P12 --cert ./certs/client.p12:test123 https://localhost:8443/`
+```
 
 ## Expected Result:
 The connection to server should be established without any problems.
@@ -25,9 +25,14 @@ The connection to server should be established without any problems.
 
 Server side:
 ~~~
-Exception in thread "main" javax.net.ssl.SSLException: No supported CertificateVerify signature algorithm for RSA  key
-at java.base/sun.security.ssl.Alert.createSSLException(Alert.java:133)
-at java.base/sun.security.ssl.Alert.createSSLException(Alert.java:117)
+pkcs11-server     | javax.net.ssl|DEBUG|10|main|2023-06-22 09:51:41.556 GMT|null:-1|close the SSL connection (passive)
+pkcs11-server     | Exception in thread "main" javax.net.ssl.SSLException: No supported CertificateVerify signature algorithm for RSA  key
+pkcs11-server     | 	at java.base/sun.security.ssl.Alert.createSSLException(Unknown Source)
+pkcs11-server     | 	at java.base/sun.security.ssl.Alert.createSSLException(Unknown Source)
+pkcs11-server     | 	at java.base/sun.security.ssl.TransportContext.fatal(Unknown Source)
+pkcs11-server     | 	at java.base/sun.security.ssl.TransportContext.fatal(Unknown Source)
+pkcs11-server     | 	at java.base/sun.security.ssl.TransportContext.fatal(Unknown Source)
+pkcs11-server     | 	at java.base/sun.security.ssl.CertificateVerify$T13CertificateVerifyMessage.<init>(Unknown Source)
 ...
 ~~~
 
