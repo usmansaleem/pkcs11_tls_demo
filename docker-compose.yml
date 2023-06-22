@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  pkcs11-ssl-certificate:
+    image: usmans/pkcs11-ssl-certs
+    container_name: 'pkcs11-ssl-certs'
+    build:
+      context: ./initcerts
+    volumes:
+      - ./certs:/certs
+  pkcs11-server:
+    image: usmans/pkcs11-server
+    container_name: 'pkcs11-server'
+    build:
+      context: ./server
+    ports:
+      - 8443:8443
+    depends_on:
+      pkcs11-ssl-certificate:
+        condition: service_completed_successfully
+    volumes:
+      - ./certs:/certs
