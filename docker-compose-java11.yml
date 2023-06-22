@@ -8,15 +8,16 @@ services:
       context: ./initcerts
     volumes:
       - ./certs:/certs
-  pkcs11-server:
-    image: usmans/pkcs11-server
-    container_name: 'pkcs11-server'
+  pkcs11-server-java11:
+    image: usmans/pkcs11-server-java11
+    container_name: 'pkcs11-server-java11'
     build:
       context: ./server
-    ports:
-      - 8443:8443
+      dockerfile: ./Java11.Dockerfile
     depends_on:
       pkcs11-ssl-certificate:
-        condition: service_completed_successfully
+        condition: service_completed_successfully    
+    ports:
+      - 8443:8443
     volumes:
       - ./certs:/certs
