@@ -7,6 +7,8 @@ hence the certificate verification fails in Java 17. The same code works in Java
 
 SoftHSM does return CKM_SHA256 as available mechanism, hence the same code works when connecting to SoftHSM via PKCS11 in Java 17.
 
+This issue is reported at https://bugs.openjdk.org/browse/JDK-8309523
+
 ## Pre-req
 - Need `docker compose`
 
