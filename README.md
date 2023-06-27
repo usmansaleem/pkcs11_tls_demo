@@ -25,7 +25,7 @@ docker compose -f ./docker-compose-java11.yml up
 ## Client connecting to Server
 - From a different terminal windows, use `curl` to connect to above server:
 ```
-curl --cacert ./certs/client.pem --cert-type P12 --cert ./certs/client.p12:test123 https://localhost:8443/`
+curl --cacert ./certs/client.pem --cert-type P12 --cert ./certs/client.p12:test123 https://localhost:8443/
 ```
 
 ## Expected Result:
